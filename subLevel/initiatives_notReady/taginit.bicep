@@ -14,6 +14,7 @@ resource policy 'Microsoft.Authorization/policyDefinitions@2020-09-01' = {
     parameters: {
       tagName: {
         type: 'String'
+        defaultValue: 'tag_name'
         metadata: {
           displayName: 'Tag name'
           description: 'A tag to audit'
@@ -21,6 +22,7 @@ resource policy 'Microsoft.Authorization/policyDefinitions@2020-09-01' = {
       }
       tagFormat: {
         type: 'String'
+        defaultValue: 'tag_format'
         metadata: {
           displayName: 'Tag format'
           description: 'An expressions for \'like\' condition' // Use backslash as an escape character for single quotation marks
@@ -78,15 +80,7 @@ resource policyInitiative 'Microsoft.Authorization/policySetDefinitions@2020-09-
       {
         policyDefinitionId: subscriptionResourceId('Microsoft.Authorization/policyDefinitions', tagPolicy1.name)
         policyDefinitionReferenceId: 'Audit a valid \'Owner\' tag is applied to resources'
-        parameters: {
-          tagName: {
-            value: '[parameters(\'ownerTagName\')]'
-          }
-          tagFormat: {
-            value: '[parameters(\'ownerTagFormat\')]'
-          }
         }
-      }
     ]
   }
 }
@@ -98,11 +92,11 @@ resource policyAssignment 'Microsoft.Authorization/policyAssignments@2020-09-01'
     displayName: 'Tag Governance Assignment'
     description: 'Assigns the Tag Governance policy set definition to the subscription'
     parameters: {
-      tagFormat: {
-        value: '[parameters(\'ownerTagFormat\')]'
-      }
       tagName: {
         value: 'tag_name'
+        }
+      tagFormat: {
+        value: 'tag_format'
       }
     }
   }
